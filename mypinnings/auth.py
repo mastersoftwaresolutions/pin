@@ -145,6 +145,14 @@ def chage_user_password(user_id, password):
 
     return database.get_db().update('users', where='id=$id', vars={'id': user_id}, pw_hash=pw_hash, pw_salt=pw_salt)
 
+# function to get user_id only by email
+def user_id_by_email(email):
+    users = database.get_db().select('users', where='email = $email', vars={'email': email}, what='id')
+    if not users:
+        return False
+    user = users[0]
+    return user['id']
+
 
 class UniqueUsernameMixin(object):
 

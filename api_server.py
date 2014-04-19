@@ -1,31 +1,28 @@
 #!/usr/bin/env python
-import web
+import web, api
 import logging
-
-import api.views.base
-import api.views.notifications
-import api.views.authentication
-import api.views.images
-import api.views.profile
-
+from api.views import *
 
 class redirect:
-    """
-        Find and redirect to existed controller with '/' or without it
-    """
-    def GET(self, path):
-        web.seeother('/' + path)
+	""" 
+		Find and redirect to existed controller with '/' or without it 
+	"""
+	def GET(self, path):
+		web.seeother('/' + path)
 
 urls = (
 	"/(.*)/", 'redirect', # Handle urls with slash and without it
 	"/query/notification", api.views.notifications.Notification, # API handler for notifications
 	"/auth", api.views.authentication.Auth, # API to authenticate users
+	
+	"/query/messages", api.views.messages.Messages,
+	"/token/manager", api.views.tokenManager.tokenManager,
 	"/image/upload", api.views.images.ImageUpload, # API to upload images
-    # API to user profile: manage user products
-    "/profile/mgl", api.views.profile.ManageGetList,
+	"/profile/mgl", api.views.profile.ManageGetList, 
 )
-web.config.debug = True
-api_app = web.application(urls, globals(), autoreload=True)
+
+web.config.debug = False
 
 if __name__ == "__main__":
-    api_app.run()
+	app = web.application(urls, globals(), autoreload=True)
+	app.run()

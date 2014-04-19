@@ -17,6 +17,8 @@ def api_response(data, status=200, error_code="", csid_from_server="", csid_from
         "data": data
     }
     web.header('Content-Type', 'application/json')
+    web.header('Access-Control-Allow-Origin', '*')
+    web.header('Access-Control-Allow-Credentials', 'true')
     return json.dumps(response)
 
 
